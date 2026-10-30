@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>FinGuard Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+    <div>
+        <h1>FinGuard</h1>
+        <p>Financial Transaction Risk Analysis Dashboard</p>
+    </div>
+
+    <div class="user-info">
+
+    <span class="username">
+        Welcome, {{ session["username"] }}
+    </span>
+
+    {% if session["role"] == "ADMIN" %}
+        <a href="{{ url_for('admin') }}" class="admin-btn">
+            Admin Panel
+        </a>
+    {% endif %}
+
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+        Logout
+    </a>
+
+</div>
+    
+    </header>
+
+    <div class="container">
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Transactions</h3>
+                <h2>{{ total }}</h2>
+            </div>
+
+            <div class="card high">
+                <h3>HIGH Risk</h3>
+                <h2>{{ high }}</h2>
+            </div>
+
+            <div class="card medium">
+                <h3>MEDIUM Risk</h3>
+                <h2>{{ medium }}</h2>
+            </div>
+
+            <div class="card low">
+                <h3>LOW Risk</h3>
+                <h2>{{ low }}</h2>
+            </div>
+
+        </div>
+
+        <div class="charts">
+
+            <div class="chart-box">
+                <h2>Risk Distribution</h2>
+                <canvas id="riskChart"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h2>Category-wise Transactions</h2>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <h2>Transaction Analysis</h2>
+
+        <div class="filters">
+
+            <input
+                type="text"
+                id="searchInput"
+                list="searchHistory"
+                autocomplete="off"
+                placeholder="Search transactions..."
+                onkeyup="filterTransactions()"
+            >
+
+            <datalist id="searchHistory"></datalist>
+
+            <select id="riskFilter" onchange="filterTransactions()">
+                <option value="ALL">All Risk Levels</option>
+                <option value="HIGH">HIGH</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="LOW">LOW</option>
+            </select>
+
+        </div>   
+
+        <table id="transactionTable">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Location</th>
+                    <th>Merchant</th>
+                    <th>Risk</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for transaction in transactions %}
+
+                <tr class="transaction-row"
+                    onclick="window.location.href='{{ url_for('transaction_details', transaction_id=transaction['TransactionID']) }}'">
+                    <td>{{ transaction["TransactionID"] }}</td>   
+                    <td>{{ transaction["Date"] }}</td>
+                    <td>{{ transaction["Time"] }}</td>
+                    <td>{{ transaction["Category"] }}</td>
+                    <td>₹{{ transaction["Amount"] }}</td>
+                    <td>{{ transaction["Location"] }}</td>
+                    <td>{{ transaction["Merchant"] }}</td>
+
+                    <td>
+                        {% if transaction["Risk"] == "HIGH" %}
+                            <span class="risk high-text">HIGH</span>
+
+                        {% elif transaction["Risk"] == "MEDIUM" %}
+                            <span class="risk medium-text">MEDIUM</span>
+
+                        {% else %}
+                            <span class="risk low-text">LOW</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script>
+
+    // Risk Distribution Chart
+
+    const riskChart = document.getElementById("riskChart");
+
+new Chart(riskChart, {
+    type: "doughnut",
+
+    data: {
+        labels: ["HIGH", "MEDIUM", "LOW"],
+
+        datasets: [{
+            data: [
+                {{ high }},
+                {{ medium }},
+                {{ low }}
+            ],
+
+            backgroundColor: [
+                "#fca5a5",
+                "#fcd34d",
+                "#86efac"
+            ],
+
+            borderColor: [
+                "#064e3b",
+                "#064e3b",
+                "#064e3b"
+            ],
+
+            borderWidth: 2
+        }]
+    },
+
+    options: {
+        responsive: true
+    }
+});
+
+
+    // Category-wise Transaction Chart
+
+    const categoryChart =
+        document.getElementById("categoryChart");
+
+    new Chart(categoryChart, {
+
+        type: "bar",
+
+        data: {
+            labels: {{ categories | tojson }},
+
+            datasets: [{
+                label: "Transactions",
+                data: {{ category_counts | tojson }}
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+</script>
+    
+</body>
+</html>

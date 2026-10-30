@@ -1,0 +1,22 @@
+TransactionID,Date,Time,Category,Amount,Location,Merchant
+T001,9/1/2026,12:20,Shopping,3000,Mohali,Amazon
+T002,9/1/2026,2:18,Shopping,5200,Delhi,Flipkart
+T003,9/2/2026,20:15,Travel,45000,Mumbai,MakeMyTrip
+T004,9/2/2026,10:15,Food,500,Chandigarh,FoodHub
+T005,9/3/2026,13:10,Electronics,75000,Delhi,Apple Store
+T006,9/3/2026,15:30,Food,650,Chandigarh,FoodHub
+T007,9/4/2026,2:05,Electronics,90000,Delhi,Croma
+T008,9/4/2026,16:45,Travel,1500,Mohali,MakeMyTrip
+T009,9/4/2026,18:40,Entertainment,1200,Chandigarh,PVR
+T010,9/5/2026,9:15,Food,450,Chandigarh,FoodHub
+T011,9/5/2026,14:30,Shopping,2500,Mohali,Reliance Trends
+T012,9/6/2026,2:22,Shopping,4800,Delhi,Amazon
+T013,9/6/2026,22:30,Shopping,3000,Mohali,Amazon
+T014,9/6/2026,11:20,Electronics,85000,Delhi,Croma
+T015,9/7/2026,15:40,Food,620,Chandigarh,FoodHub
+T016,9/7/2026,19:10,Food,700,Chandigarh,FoodHub
+T017,9/7/2026,2:08,Travel,60000,Delhi,MakeMyTrip
+T018,9/8/2026,1:30,Travel,60000,Mumbai,MakeMyTrip
+T019,9/10/2026,2:15,Shopping,4500,Delhi,Amazon
+T020,9/12/2026,12:22,Shopping,3000,Mohali,Amazon
+T021,9/12/2026,15:35,Food,680,Chandigarh,FoodHub

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Transaction Details - FinGuard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>FinGuard</h1>
+
+        <p>Financial Transaction Risk Analysis Dashboard</p>
+
+    </header>
+
+
+    <div class="details-container">
+
+        <a href="/" class="back-button">
+            ← Back to Dashboard
+        </a>
+
+
+        <h2>Transaction Details</h2>
+
+
+        <div class="details-card">
+
+            <div class="detail-row">
+                <strong>Transaction ID</strong>
+                <span>{{ transaction["TransactionID"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Date</strong>
+                <span>{{ transaction["Date"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Time</strong>
+                <span>{{ transaction["Time"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Category</strong>
+                <span>{{ transaction["Category"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Amount</strong>
+                <span>₹{{ transaction["Amount"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Location</strong>
+                <span>{{ transaction["Location"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Merchant</strong>
+                <span>{{ transaction["Merchant"] }}</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Risk Score</strong>
+                <span>{{ transaction["RiskScore"] }}</span>
+            </div>
+
+            <div class="detail-row">
+
+                <strong>Risk Level</strong>
+
+                <span class="risk {{ transaction['Risk']|lower }}-text">
+                    {{ transaction["Risk"] }}
+                </span>
+
+            </div>
+
+
+            <!-- Risk Investigation -->
+
+            <div class="investigation-section">
+
+                <h3>Risk Investigation</h3>
+
+                {% if transaction["Reason"] == "Normal transaction" %}
+
+                    <div class="normal-message">
+                        ✓ No suspicious activity detected
+                    </div>
+
+                {% else %}
+
+                    {% for reason in transaction["Reason"].split(", ") %}
+
+                        <div class="warning-item">
+
+                            <span class="warning-icon">⚠</span>
+
+                            <span>{{ reason }}</span>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Risk Score Breakdown -->
+
+            <div class="score-section">
+
+                <h3>Risk Score Breakdown</h3>
+
+                {% if transaction["ScoreBreakdown"] == "No risk points" %}
+
+                    <div class="normal-message">
+                        ✓ No risk points added
+                    </div>
+
+                {% else %}
+
+                    {% for score in transaction["ScoreBreakdown"].split(", ") %}
+
+                        <div class="score-item">
+
+                            <span>{{ score.rsplit(": ", 1)[0] }}</span>
+
+                            <strong>{{ score.rsplit(": ", 1)[1] }}</strong>
+
+                        </div>
+
+                    {% endfor %}
+
+                    <div class="total-score">
+
+                        <span>Total Risk Score</span>
+
+                        <strong>{{ transaction["RiskScore"] }}</strong>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
